@@ -28,5 +28,15 @@ input_inter = Interaction({
 })
 with torch.no_grad():
     scores = model.full_sort_predict(input_inter)
-print(scores.shape)
-print(scores)
+print("Scores shape\n",scores.shape)
+print("Scores: ",scores)
+
+top_k = torch.topk(scores, k=10, dim=1).indices  # shape [2, 10]
+top_k = top_k.cpu().numpy()
+
+item_field = 'item_id'  # hardcoded for ML-100k
+
+for user_idx, rec_indices in enumerate(top_k):
+    rec_item_ids = [dataset.id2token(item_field, int(i)) for i in rec_indices]
+    print(f"Top-10 recommended items for user {user_idx + 1}: {rec_item_ids}")
+
