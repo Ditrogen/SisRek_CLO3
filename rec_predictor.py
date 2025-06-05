@@ -67,9 +67,15 @@ def get_recommendations(user_item_sequences, top_k=10):
 
     item_field = 'item_id' # [cite: 1]
     all_recommendations = []
+
+    from makeRec import load_movie_titles
+    file_path = r"venv\Lib\site-packages\recbole\dataset_example\ml-100k\ml-100k.item"
+    movie_titles = load_movie_titles(file_path)
+
     for rec_indices in top_k_indices:
         rec_item_ids = [dataset.id2token(item_field, int(i)) for i in rec_indices] # [cite: 1]
-        all_recommendations.append(rec_item_ids)
+        rec_titles = [movie_titles.get(item_id, "Unknown") for item_id in rec_item_ids]
+        all_recommendations.append(rec_titles)
 
     return all_recommendations
 

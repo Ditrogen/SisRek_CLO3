@@ -4,6 +4,7 @@ import threading
 from rec_predictor import get_recommendations, initialize_recommender
 
 class RecommenderApp:
+    # Nginisiasi layout dari aplikasinya
     def __init__(self, root):
         self.root = root
         self.root.title("Sistem Rekomendasi RecBole")
@@ -12,6 +13,7 @@ class RecommenderApp:
         self.create_widgets()
         self.initialize_model_async()
 
+    # Ini buat input fieldnya
     def create_widgets(self):
         # Frame untuk input
         input_frame = ttk.LabelFrame(self.root, text="Urutan Item Pengguna")
@@ -20,6 +22,7 @@ class RecommenderApp:
         self.input_label = ttk.Label(input_frame, text="Masukkan urutan (misalnya, 1,2,3; 4,5):")
         self.input_label.pack(padx=5, pady=5, anchor="w")
 
+        # Input urutan interaksi
         self.input_text = tk.Text(input_frame, height=5, width=70)
         self.input_text.pack(padx=5, pady=5)
         self.input_text.insert(tk.END, "1,2,3; 4,5") # Isi dengan contoh
@@ -32,7 +35,7 @@ class RecommenderApp:
         self.k_label.pack(side="left", padx=5, pady=5)
 
         self.k_entry = ttk.Entry(k_frame, width=5)
-        self.k_entry.insert(0, "10") # Nilai K default
+        self.k_entry.insert(0, "10") # Nilai topK default
         self.k_entry.pack(side="left", padx=5, pady=5)
 
         # Tombol
@@ -51,6 +54,7 @@ class RecommenderApp:
         self.output_text.pack(padx=5, pady=5, fill="both", expand=True)
 
     def initialize_model_async(self):
+        # Threading
         """Menginisialisasi model dalam thread terpisah untuk mencegah GUI membeku."""
         self.recommend_button.config(state="disabled")
         self.status_label.config(text="Menginisialisasi model...", foreground="blue")
@@ -119,7 +123,7 @@ class RecommenderApp:
         self.output_text.delete("1.0", tk.END)
         if recommendations:
             for i, recs in enumerate(recommendations):
-                self.output_text.insert(tk.END, f"Rekomendasi Pengguna {i+1} (Top {len(recs)}): {', '.join(recs)}\n")
+                self.output_text.insert(tk.END, f"Rekomendasi Pengguna {i+1} (Top {len(recs)}): {' ; '.join(recs)}\n")
         else:
             self.output_text.insert(tk.END, "Tidak ada rekomendasi ditemukan.\n")
         self.output_text.config(state="disabled")

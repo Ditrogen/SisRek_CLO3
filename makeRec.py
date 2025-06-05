@@ -40,3 +40,23 @@ for user_idx, rec_indices in enumerate(top_k):
     rec_item_ids = [dataset.id2token(item_field, int(i)) for i in rec_indices]
     print(f"Top-10 recommended items for user {user_idx + 1}: {rec_item_ids}")
 
+def load_movie_titles(file_path):
+    movie_titles = {}
+    with open(file_path, 'r', encoding='utf-8') as f:
+        next(f)  # skip header
+        for line in f:
+            parts = line.strip().split('\t')
+            item_id = parts[0]
+            title = parts[1]
+            movie_titles[item_id] = title
+    return movie_titles
+
+file_path = r"venv\Lib\site-packages\recbole\dataset_example\ml-100k\ml-100k.item"
+movie_titles = load_movie_titles(file_path)
+
+for user_idx, rec_indices in enumerate(top_k):
+    rec_item_ids = [dataset.id2token(item_field, int(i)) for i in rec_indices]
+    rec_titles = [movie_titles.get(item_id, "Unknown") for item_id in rec_item_ids]
+    print(f"Top-10 recommended items for user {user_idx + 1}: {rec_item_ids}")
+    print(f"Top-10 recommended titles for user {user_idx + 1}: {rec_titles}")
+
